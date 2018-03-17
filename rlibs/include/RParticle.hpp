@@ -1,31 +1,50 @@
 #pragma once
+#include <string>
+#include <vector>
 #include "RVector.hpp"
 #include "RLorentz.hpp"
 
-struct ParticleType
+class RParticleType
 {
-  std::string name;
-  int PDGid;
-  double mass;
-  int charge;
-  ParticleType (std::string fname, int fPDGid, double fmass, int fcharge)
-  ParticleType chargeConjugation () {return ParticleType (name, -PDGid, mass,
-    -charge);
+  private:
+    std::string name;
+    int PDGid;
+    double mass;
+    int charge;
+  public:
+    double Mass () const {return mass;};
+    RParticleType (std::string fname, int fPDGid, double fmass, int fcharge);
+    RParticleType chargeConjugation () const {return RParticleType (name, -PDGid, mass,
+      -charge);};
 };
 
-typedef struct ParticleType RParticleType;
+class RParticleTable
+{
+  public:
+    static RParticleTable& Instance()
+    {
+        static RParticleTable s;
+        return s;
+    };
+		std::vector <RParticleType> particles;
+  private:
+    RParticleTable();
+    ~RParticleTable();
 
-RParticleType ParticleTable [3] = {
-  {"tau", 15, 1.777, -1},
-  {"pi",111, 0.139, 1},
-  {"nutau", 16, 0.001, 0}};
-
+    RParticleTable(RParticleTable const&)=delete; 
+    RParticleTable& operator= (RParticleTable const&)=delete;
+};
 
 class RParticle
 {
   private:
     RLorentz P;
-    RVector xx; //lol, Heisenberg would be very surprized
-    RParticleType type;
+    RVector X; //lol, Heisenberg would be very surprized
+    std::vector <RParticleType>::iterator type_iterator;
   public:
-    
+    RParticle (std::string name, const RVector& fP, const RVector &fX);
+    void dump ()const;
+    double mass () const {return type_iterator->Mass ();};
+    RLorentz getP () const {return P;};
+    void boost (const RLorentz & kuda) {P.boost (kuda);};
+};    

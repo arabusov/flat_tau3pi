@@ -4,7 +4,11 @@
 
 double RLorentz::getM () const
 {
-  return sqrt(ft*ft - fx*fx - fy*fy - fz*fz); 
+  double mm = (ft*ft - fx*fx - fy*fy - fz*fz); 
+  if (mm>=0)
+    return sqrt (mm);
+  else
+    return -mm;
 }
 
 double RLorentz::gamma () const
@@ -24,4 +28,58 @@ void RLorentz::boost (const RLorentz & kuda)
   RVector direction = kuda.getVector ();
   RVector longiProj = vector().proj (direction);
   RVector transProj = vector () - longiProj;
+  double length = longiProj.length();
+  double ftt = gamma*ft + beta*gamma*length;
+  longiProj = longiProj * (1./length);
+  length = gamma*length + beta*gamma*ft;
+  longiProj = longiProj * (length);
+  (longiProj+transProj).getXYZ (fx, fy, fz);
+  ft = ftt;
+  return;
+}
+
+RLorentz operator+ (const RLorentz& left, const RLorentz& right)
+{
+  RLorentz res (
+    left.t()+right.t(),   
+    left.x()+right.x(),   
+    left.y()+right.y(),   
+    left.z()+right.z());
+  return res;
+}
+  
+RLorentz operator- (const RLorentz& left, const RLorentz& right)
+{
+  RLorentz res (
+    left.t()-right.t(),   
+    left.x()-right.x(),   
+    left.y()-right.y(),   
+    left.z()-right.z());
+  return res;
+}
+
+double operator* (const RLorentz& left, const RLorentz& right)
+{
+  double res =
+    left.t()*right.t()-
+    left.x()+right.x()-   
+    left.y()+right.y()-   
+    left.z()+right.z();
+  return res;
+}
+
+RLorentz operator* (const RLorentz& left, const double& right)
+{
+  RLorentz res (
+    left.t()*right, 
+    left.x()*right,   
+    left.y()*right,   
+    left.z()*right);
+  return res;
+}
+
+RLorentz operator* (const double & left, const RLorentz & right)
+{
+  return right*left;
+}
 
