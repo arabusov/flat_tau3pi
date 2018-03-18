@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 class RVector
 {
   private:
@@ -19,6 +20,7 @@ class RVector
     void setZ(double z) {fz=z;};
     RVector proj (const RVector & direction) const ;
     double length () const;
+    std::string str () const;
 };
 
 

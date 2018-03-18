@@ -2,6 +2,8 @@
 #include <iostream>
 #include <algorithm>    // std::find
 #include <cmath>
+#include <string>
+#include <sstream>
 
 RParticleType::RParticleType (std::string fname, int fPDGid, double fmass, int
 fcharge)
@@ -12,6 +14,12 @@ fcharge)
   charge = fcharge;
 }
 
+std::string RParticleType::str () const
+{
+  std::stringstream ss;
+  ss << "Type: " << name;
+  return ss.str();
+}
 RParticleTable::RParticleTable ()
 {
 	particles.push_back(RParticleType ("tau", 15, 1.777, -1));
@@ -26,13 +34,13 @@ RParticleTable::~RParticleTable ()
 
 void RParticle::dump ()const
 {
-  std::cout << "Blah" << std::endl;
+  std::cout << type.str() << " " << ", P: " << P.str() << ", X: " << X.str();
+  std::cout << std::endl;
 }
 
 RParticle::RParticle (std::string name, const RVector& fP, const RVector &fX)
 {
   X=fX;
-  std::vector <RParticleType>::iterator it;
   RParticleTable & table = RParticleTable::Instance();
   for (auto & it: table.particles)
   {
@@ -41,4 +49,5 @@ RParticle::RParticle (std::string name, const RVector& fP, const RVector &fX)
   }
   double E = sqrt (
     type.Mass ()*type.Mass ()+fP*fP);
+  P = RLorentz (E, fP.x(), fP.y(), fP.z());
 }

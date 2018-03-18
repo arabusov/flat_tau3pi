@@ -1,6 +1,8 @@
 #include "RLorentz.hpp"
 #include "RVector.hpp"
 #include <cmath>
+#include <string>
+#include <sstream>
 
 double RLorentz::getM () const
 {
@@ -81,5 +83,12 @@ RLorentz operator* (const RLorentz& left, const double& right)
 RLorentz operator* (const double & left, const RLorentz & right)
 {
   return right*left;
+}
+
+std::string RLorentz::str () const
+{
+  std::stringstream ss;
+  ss << ft<<" " <<fx << " " << fy << " " << fz << " ";
+  return ss.str();
 }
 

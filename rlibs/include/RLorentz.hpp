@@ -1,5 +1,6 @@
 #pragma once
 #include "RVector.hpp"
+#include <string>
 
 class RLorentz
 {
@@ -26,6 +27,7 @@ class RLorentz
     void boost (const RLorentz & kuda);
     double getM () const;
     double m () const {return getM ();};
+    std::string str () const;
 };
 
 RLorentz operator+ (const RLorentz& left, const RLorentz& right);

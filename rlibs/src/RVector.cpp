@@ -1,5 +1,7 @@
 #include <cmath>
 #include "RVector.hpp"
+#include <string>
+#include <sstream>
 RVector operator+ (const RVector& left, const RVector& right)
 {
   RVector res (
@@ -52,4 +54,11 @@ RVector RVector::proj (const RVector & direction) const
   RVector norm_direction = direction*(1./direction.length());
   result = norm_direction * (norm_direction*(*this));
   return result;  
+}
+
+std::string RVector::str () const
+{
+  std::stringstream ss;
+  ss << fx << " " << fy << " " <<fz ;
+  return ss.str();
 }

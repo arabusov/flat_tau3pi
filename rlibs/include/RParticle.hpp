@@ -18,6 +18,7 @@ class RParticleType
     RParticleType (std::string fname, int fPDGid, double fmass, int fcharge);
     RParticleType chargeConjugation () const {return RParticleType (name, -PDGid, mass,
       -charge);};
+    std::string str () const;
 };
 
 class RParticleTable

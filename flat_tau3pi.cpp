@@ -26,30 +26,43 @@ double genFlat (double min=-1., double max=1.)
 }
 
 //RParticleList genDecay (const RVector & Ptau, const RVector & Xtau)
-void genDecay (const RVector & Ptau, const RVector & Xtau)
+RParticleList genDecay (RVector & Ptau, RVector & Xtau)
 {
-  //RParticleList plist;
+  RParticleList plist;
   RParticle tau_m ("tau", Ptau, Xtau);
   double tau_mass = tau_m.mass();
-  //plist.add (tau_m);
+  plist.add (tau_m);
   //TODO make physical correct generation
   //calc neutrino momentum in tau rest frame
   double m3pi = genFlat (0, tau_m.mass());
   double nu_phi = genFlat (0, 2*pi);
   double nu_th = genFlat (0,pi);
-  double p_nu = pow (tau_mass*tau_mass - m3pi*m3pi, 0.5); 
+  double p_nu = sqrt (tau_mass*tau_mass - m3pi*m3pi);
   RVector Pneutrino (p_nu * cos (nu_phi) * sin (nu_th),
     p_nu * sin (nu_phi) * sin (nu_th),
     p_nu * cos (nu_th));
   RParticle nu ("nutau", Pneutrino, Xtau);
   nu.boost (tau_m.getP()); //boost tau to lab
-  //plist.add (nu);
+  plist.add (nu);
+  //blah blah
+  return plist;
+}
 
+void genEvent ()
+{
+  double r = genFlat (1,2);
+  double theta = acos(sqrt (r-1));
+  double phi = genFlat (0,2*pi);
+  double P=1.;
+  RVector Ptau (P*sin(theta)*cos(phi),P*sin(theta)*sin(phi),P*cos(theta));
+  RVector Xtau (0,0,0);
+  RParticleList plist = genDecay (Ptau, Xtau);
+  plist.dump();
 }
 
 int main (int argc, char ** argv)
 {
+  genEvent ();   
   return 0;
-
 }
 
