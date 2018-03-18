@@ -36,11 +36,9 @@ RParticle::RParticle (std::string name, const RVector& fP, const RVector &fX)
   RParticleTable & table = RParticleTable::Instance();
   for (auto & it: table.particles)
   {
-    if (it->getName () == name)
-      type_iterator=it;
+    if (it.getName () == name)
+      type=it;
   }
   double E = sqrt (
-    type_iterator.Mass ()*type_iterator.Mass ()+fP*fP);
+    type.Mass ()*type.Mass ()+fP*fP);
 }
-
-

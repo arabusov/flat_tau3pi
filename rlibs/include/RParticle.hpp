@@ -12,7 +12,9 @@ class RParticleType
     double mass;
     int charge;
   public:
+    RParticleType () {};
     double Mass () const {return mass;};
+    std::string getName () const {return name;};
     RParticleType (std::string fname, int fPDGid, double fmass, int fcharge);
     RParticleType chargeConjugation () const {return RParticleType (name, -PDGid, mass,
       -charge);};
@@ -40,11 +42,12 @@ class RParticle
   private:
     RLorentz P;
     RVector X; //lol, Heisenberg would be very surprized
-    std::vector <RParticleType>::iterator type_iterator;
+    RParticleType type;
   public:
+    RParticle () {};
     RParticle (std::string name, const RVector& fP, const RVector &fX);
     void dump ()const;
-    double mass () const {return type_iterator->Mass ();};
+    double mass () const {return type.Mass ();};
     RLorentz getP () const {return P;};
     void boost (const RLorentz & kuda) {P.boost (kuda);};
 };    
