@@ -2,6 +2,7 @@
 #include "RVector.hpp"
 #include <string>
 #include <sstream>
+#include <iostream>
 RVector operator+ (const RVector& left, const RVector& right)
 {
   RVector res (
@@ -23,9 +24,9 @@ RVector operator- (const RVector& left, const RVector& right)
 double operator* (const RVector& left, const RVector& right)
 {
   double res =
-    left.x()+right.x()+
-    left.y()+right.y()+   
-    left.z()+right.z();
+    left.x()*right.x()+
+    left.y()*right.y()+   
+    left.z()*right.z();
   return res;
 }
 
@@ -50,7 +51,7 @@ double RVector::length () const
 
 RVector RVector::proj (const RVector & direction) const
 {
-  RVector result;
+  RVector result (0,0,0);
   RVector norm_direction = direction*(1./direction.length());
   result = norm_direction * (norm_direction*(*this));
   return result;  

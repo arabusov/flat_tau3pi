@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 double RLorentz::getM () const
 {
@@ -64,9 +65,9 @@ double operator* (const RLorentz& left, const RLorentz& right)
 {
   double res =
     left.t()*right.t()-
-    left.x()+right.x()-   
-    left.y()+right.y()-   
-    left.z()+right.z();
+    left.x()*right.x()-   
+    left.y()*right.y()-   
+    left.z()*right.z();
   return res;
 }
 
