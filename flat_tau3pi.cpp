@@ -24,7 +24,7 @@ double genFlat (double min=-1., double max=1.)
   std::uniform_real_distribution <> distr (min, max);
   return distr (gen);
 }
-
+double sqr (double x) {return x*x;}
 //RParticleList genDecay (const RVector & Ptau, const RVector & Xtau)
 RParticleList genDecay (RVector & Ptau, RVector & Xtau)
 {
@@ -34,16 +34,20 @@ RParticleList genDecay (RVector & Ptau, RVector & Xtau)
   plist.add (tau_m);
   //TODO make physical correct generation
   //calc neutrino momentum in tau rest frame
+  RVector Pneutrino (0,0,0);
+  RParticle nu ("nutau", Pneutrino, Xtau);
   double m3pi = genFlat (0, tau_m.mass());
   double nu_phi = genFlat (0, 2*pi);
   double nu_th = genFlat (0,pi);
-  double p_nu = sqrt (tau_mass*tau_mass - m3pi*m3pi);
-  RVector Pneutrino (p_nu * cos (nu_phi) * sin (nu_th),
+  double e_nu = (sqr(tau_m.mass())+sqr(nu.mass())-sqr(m3pi))/2./tau_m.mass();
+  double p_nu = sqrt (sqr (e_nu) - sqr (nu.mass()));
+  Pneutrino = RVector (p_nu * cos (nu_phi) * sin (nu_th),
     p_nu * sin (nu_phi) * sin (nu_th),
     p_nu * cos (nu_th));
-  RParticle nu ("nutau", Pneutrino, Xtau);
+  nu.setP (Pneutrino);
   nu.boost (tau_m.getP()); //boost tau to lab
   plist.add (nu);
+  std::cout << tau_m.E() - nu.E() << std::endl;
   //blah blah
   return plist;
 }
@@ -57,12 +61,14 @@ void genEvent ()
   RVector Ptau (P*sin(theta)*cos(phi),P*sin(theta)*sin(phi),P*cos(theta));
   RVector Xtau (0,0,0);
   RParticleList plist = genDecay (Ptau, Xtau);
-  plist.dump();
 }
 
 int main (int argc, char ** argv)
 {
-  genEvent ();   
+  for (unsigned int i = 0; i < 10000; i++)
+  {
+    genEvent ();   
+  }
   return 0;
 }
 

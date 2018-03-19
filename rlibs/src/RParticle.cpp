@@ -47,6 +47,11 @@ RParticle::RParticle (std::string name, const RVector& fP, const RVector &fX)
     if (it.getName () == name)
       type=it;
   }
+  setP (fP);
+}
+
+void RParticle::setP (const RVector & fP)
+{
   double E = sqrt (
     type.Mass ()*type.Mass ()+fP*fP);
   P = RLorentz (E, fP.x(), fP.y(), fP.z());

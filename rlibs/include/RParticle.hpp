@@ -51,4 +51,6 @@ class RParticle
     double mass () const {return type.Mass ();};
     RLorentz getP () const {return P;};
     void boost (const RLorentz & kuda) {P.boost (kuda);};
+    void setP(const RVector &fP);
+    double E () const {return P.E();};
 };    

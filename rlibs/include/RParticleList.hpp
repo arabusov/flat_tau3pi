@@ -16,4 +16,5 @@ class RParticleList
       {for (const auto & it: particles_vector) 
         it.dump();
       }; 
+    std::vector <RParticle> getList () const {return particles_vector;};
 };
