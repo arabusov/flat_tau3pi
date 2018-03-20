@@ -53,12 +53,7 @@ RLorentz operator+ (const RLorentz& left, const RLorentz& right)
   
 RLorentz operator- (const RLorentz& left, const RLorentz& right)
 {
-  RLorentz res (
-    left.t()-right.t(),   
-    left.x()-right.x(),   
-    left.y()-right.y(),   
-    left.z()-right.z());
-  return res;
+  return left+(-1.)*right;
 }
 
 double operator* (const RLorentz& left, const RLorentz& right)

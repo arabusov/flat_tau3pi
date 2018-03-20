@@ -14,11 +14,7 @@ RVector operator+ (const RVector& left, const RVector& right)
   
 RVector operator- (const RVector& left, const RVector& right)
 {
-  RVector res (
-    left.x()-right.x(),   
-    left.y()-right.y(),   
-    left.z()-right.z());
-  return res;
+  return left+(-1.)*right;
 }
 
 double operator* (const RVector& left, const RVector& right)
