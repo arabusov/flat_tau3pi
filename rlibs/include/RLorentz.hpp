@@ -1,5 +1,6 @@
 #pragma once
 #include "RVector.hpp"
+#include <cmath>
 #include <string>
 
 class RLorentz
@@ -20,6 +21,7 @@ class RLorentz
     double x () const { return fx;};
     double y () const { return fy;};
     double z () const { return fz;};
+    double theta () const {return acos (fz/sqrt(fx*fx+fy*fy+fz*fz));}
     double getE () const {return ft;};
     double E () const {return getE ();};
     double beta () const;

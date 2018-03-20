@@ -4,8 +4,8 @@ import sys
 
 data=[]
 fl=open (sys.argv[1])
-h=TH1D  ("hist", "Histogram",100,0.,3.)
+h=TH1D  ("hist", "Histogram",500,0.,3.)
 for line in fl:
-  h.Fill (float(line))
+  h.Fill (float(line.split()[int(sys.argv[2])]))
 h.Draw()
 raw_input()

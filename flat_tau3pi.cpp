@@ -42,18 +42,19 @@ RParticleList genDecay (RVector & Ptau, RVector & Xtau)
   double m3pi = genFlat (3*pi1.mass(), tau_m.mass()-nu.mass());
   //gen Neutrino
   double nu_phi = genFlat (0, 2*pi);
-  double nu_th = genFlat (0,pi);
+  double nu_costh = genFlat (-1.,1.);
+  double nu_th = acos (nu_costh);
   double e_nu = (sqr(tau_m.mass())+sqr(nu.mass())-sqr(m3pi))/2./tau_m.mass();
   double p_nu = sqrt (sqr (e_nu) - sqr (nu.mass()));
   Pneutrino = RVector (p_nu * cos (nu_phi) * sin (nu_th),
     p_nu * sin (nu_phi) * sin (nu_th),
     p_nu * cos (nu_th));
   nu.setP (Pneutrino);
-  nu.boost (tau_m.getP()); //boost from tau to lab system
+  nu.boost (tau_m.getP()); //boost from tau to "lab" system
   plist.add (nu);
   //Neutrino generated. some kinematics to plot histogramms
-  //nu.LorentzTransform (tau_m.getP());
-  std::cout << nu.getP() * nu.getP()<< std::endl;
+  nu.LorentzTransform (tau_m.getP());
+  std::cout << nu.getP().theta()<< std::endl;
   //blah blah
   return plist;
 }
@@ -71,7 +72,7 @@ void genEvent ()
 
 int main (int argc, char ** argv)
 {
-  for (unsigned int i = 0; i < 10; i++)
+  for (unsigned int i = 0; i < 10000; i++)
   {
     genEvent ();   
   }
