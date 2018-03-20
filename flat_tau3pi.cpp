@@ -34,9 +34,13 @@ RParticleList genDecay (RVector & Ptau, RVector & Xtau)
   plist.add (tau_m);
   //TODO make physical correct generation
   //calc neutrino momentum in tau rest frame
-  RVector Pneutrino (0,0,0);
+  RVector Pneutrino (0,0,0), Ppi1, Ppi2, Ppi3;
   RParticle nu ("nutau", Pneutrino, Xtau);
-  double m3pi = genFlat (0, tau_m.mass());
+  RParticle pi1 ("pi", Ppi1,Xtau), pi2 ("pi", Ppi2, Xtau), pi3 ("pi", Ppi3,
+    Xtau);
+  pi3.chargeConjugate();
+  double m3pi = genFlat (3*pi1.mass(), tau_m.mass()-nu.mass());
+  //gen Neutrino
   double nu_phi = genFlat (0, 2*pi);
   double nu_th = genFlat (0,pi);
   double e_nu = (sqr(tau_m.mass())+sqr(nu.mass())-sqr(m3pi))/2./tau_m.mass();
@@ -45,9 +49,11 @@ RParticleList genDecay (RVector & Ptau, RVector & Xtau)
     p_nu * sin (nu_phi) * sin (nu_th),
     p_nu * cos (nu_th));
   nu.setP (Pneutrino);
-  nu.boost (tau_m.getP()); //boost tau to lab
+  nu.boost (tau_m.getP()); //boost from tau to lab system
   plist.add (nu);
-  std::cout << tau_m.E() - nu.E() << std::endl;
+  //Neutrino generated. some kinematics to plot histogramms
+  //nu.LorentzTransform (tau_m.getP());
+  std::cout << nu.getP() * nu.getP()<< std::endl;
   //blah blah
   return plist;
 }
@@ -65,7 +71,7 @@ void genEvent ()
 
 int main (int argc, char ** argv)
 {
-  for (unsigned int i = 0; i < 10000; i++)
+  for (unsigned int i = 0; i < 10; i++)
   {
     genEvent ();   
   }

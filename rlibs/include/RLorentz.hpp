@@ -24,7 +24,9 @@ class RLorentz
     double E () const {return getE ();};
     double beta () const;
     double gamma () const;
-    void boost (const RLorentz & kuda);
+    void boost (const RLorentz & kuda, int sign = 1);
+    void LorentzTransform (const RLorentz & restFrame);
+    void LorentzInverseTransform (const RLorentz & toLVector);
     double getM () const;
     double m () const {return getM ();};
     std::string str () const;

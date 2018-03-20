@@ -14,7 +14,7 @@ class RVector
     double y() const {return fy;};
     double z() const {return fz;};
     void getXYZ (double & X, double & Y, double & Z) const
-      {X=fx;Y=fy;Z=fy;};
+      {X=fx;Y=fy;Z=fz;};
     void setX(double x) {fx=x;};
     void setY(double y) {fy=y;};
     void setZ(double z) {fz=z;};

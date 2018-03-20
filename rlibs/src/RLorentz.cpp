@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-
+#define debug 1
 double RLorentz::getM () const
 {
   double mm = (ft*ft - fx*fx - fy*fy - fz*fz); 
@@ -24,9 +24,9 @@ double RLorentz::beta () const
   return sqrt(1-1/gamma()/gamma());
 }
 
-void RLorentz::boost (const RLorentz & kuda)
+void RLorentz::boost (const RLorentz & kuda, int sign)
 {
-  double beta = kuda.beta ();
+  double beta = sign * kuda.beta ();
   double gamma = kuda.gamma ();
   RVector direction = kuda.getVector ();
   RVector longiProj = vector().proj (direction);
@@ -35,10 +35,21 @@ void RLorentz::boost (const RLorentz & kuda)
   double ftt = gamma*ft + beta*gamma*length;
   longiProj = longiProj * (1./length);
   length = gamma*length + beta*gamma*ft;
-  longiProj = longiProj * (length);
-  (longiProj+transProj).getXYZ (fx, fy, fz);
+  longiProj = longiProj * length;
+  RVector sum = longiProj + transProj;
+  sum.getXYZ (fx, fy, fz);
   ft = ftt;
   return;
+}
+
+void RLorentz::LorentzTransform (const RLorentz & restFrame)
+{
+  boost (restFrame, -1); //-1 : sign before beta
+}
+
+void RLorentz::LorentzInverseTransform (const RLorentz & boostLVector)
+{
+  boost (boostLVector, 1);
 }
 
 RLorentz operator+ (const RLorentz& left, const RLorentz& right)

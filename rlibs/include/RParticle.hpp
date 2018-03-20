@@ -45,12 +45,14 @@ class RParticle
     RVector X; //lol, Heisenberg would be very surprized
     RParticleType type;
   public:
-    RParticle () {};
+    RParticle () {}
     RParticle (std::string name, const RVector& fP, const RVector &fX);
     void dump ()const;
-    double mass () const {return type.Mass ();};
-    RLorentz getP () const {return P;};
-    void boost (const RLorentz & kuda) {P.boost (kuda);};
+    double mass () const {return type.Mass ();}
+    RLorentz getP () const {return P;}
+    void boost (const RLorentz & kuda) {P.boost (kuda);}
+    void LorentzTransform (const RLorentz & lv) {P.LorentzTransform (lv);}
     void setP(const RVector &fP);
-    double E () const {return P.E();};
+    double E () const {return P.E();}
+    void chargeConjugate () {type=type.chargeConjugation ();}
 };    
