@@ -10,6 +10,7 @@
 #include "RLorentz.hpp"
 #include "RParticleList.hpp"
 #include "RParticle.hpp"
+#include "RSO3.hpp"
 
 const double pi = boost::math::constants::pi<double>();
 double genFlat (std::random_device & rd, double min=-1., double max=1.)
@@ -25,6 +26,18 @@ double genFlat (std::random_device & rd, double min=-1., double max=1.)
   return distr (rd);
 }
 double sqr (double x) {return x*x;}
+
+double px (double e1, double e2, double p3, int i=1)
+{
+  double sign = i%2==0 ? -1.: 1.;
+  return p3/2. + sign /2. * (e1*e1-e2*e2);
+}
+
+double py (double e1, double e2, double p3, double m, int i=1)
+{
+  double sign = i%2==0 ? -1.: 1.;
+  return sign*((e1*e1 + e2*e2 -p3*p3)/2. - sqr(e1*e1-e2*e2)/4./p3/p3);
+}
 //RParticleList genDecay (const RVector & Ptau, const RVector & Xtau)
 RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
 {
@@ -66,9 +79,29 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
     E2 = genFlat (rd, pi1.mass(),a1_mass-2*pi1.mass());
     ngen = ngen+1;
   }
-  std::cout << ngen << " ";
   double E3 = a1_mass - E1 - E2;
-  std::cout << E1 <<" " << E2 << " " << E3;
+  RVector p3 (sqrt(sqr(E3)-sqr(pi1.mass())),0,0);
+  std::cout << p3.length() << " ";
+  double p3x=p3.length();
+  double p1x = px (E1,E2,p3x,1);
+  double p2x = px (E1,E2,p3x,2);
+  double p1y = py (E1,E2, p3x, pi1.mass(),1);
+  double p2y = py (E1,E2, p3x, pi2.mass(),2);
+  RVector p1 (-p1x, p1y, 0);
+  RVector p2 (-p2x, p2y, 0);
+  std::cout << E1*E1 - p1*p1 << " ";
+  std::cout << E2*E2 - p2*p2 << " ";
+  std::cout << sqrt(E3*E3 - p3*p3) << " ";
+  //euler transform
+  double alpha=genFlat (rd,0,2*pi);
+  double gamma=genFlat(rd,0,2*pi);
+  double cosbeta = genFlat (rd,-1,1);
+  double beta = acos (cosbeta);
+  RSO3 euler;
+  euler.EulerTransform (alpha, beta, gamma);
+  p3 = euler*p3;
+  //boost to tau rest frame system (alongside a1)
+  //boost to "lab" rest frame (alongside tau)
   std::cout << std::endl;
   return plist;
 }

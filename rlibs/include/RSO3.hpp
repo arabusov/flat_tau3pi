@@ -15,9 +15,9 @@ class RSO3
     RVector getRow (unsigned int row) const;
     RVector getColumn (unsigned int column) const;
     double getElement (unsigned int row, unsigned int column)const ;
-    double setElement (unsigned int row, unsigned int column,double val);
+    void setElement (unsigned int row, unsigned int column,double val);
     void EulerTransform (double phi, double theta, double psi);
-}
+};
 
 RSO3 operator* (const RSO3 & left, const RSO3 & right);
 RVector operator* (const RVector & left, const RSO3 & right);

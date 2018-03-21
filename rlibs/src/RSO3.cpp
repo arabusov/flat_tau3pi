@@ -6,28 +6,28 @@
 #include <cmath>
 RVector RSO3::operator* (const RVector & right)
 {
-  double x=(*this).getRow()*right;
-  double y=(*this).getRow()*right;
-  double z=(*this).getRow()*right;
+  double x=(*this).getRow(1)*right;
+  double y=(*this).getRow(2)*right;
+  double z=(*this).getRow(3)*right;
   RVector res (x,y,z);
   return res;
 }
 
-RVector :operator* (const RVector & left, const RSO3 & right)
+RVector operator* (const RVector & left, const RSO3 & right)
 {
-  double x=right.getColumn()*right;
-  double y=right.getColumn()*right;
-  double z=right.getColumn()*right;
+  double x=right.getColumn(1)*left;
+  double y=right.getColumn(2)*left;
+  double z=right.getColumn(3)*left;
   RVector res (x,y,z);
   return res;
 }
 
 RVector RSO3::getColumn (unsigned int column) const
 {
-  RVector res ();
+  RVector res;
   if((column <1) or (column>3))
     return res;
-  RVector res1 (a[0][column], a[1][column], a[2][column]);
+  RVector res1 (a[0][column-1], a[1][column-1], a[2][column-1]);
   return res1;
 }
 
@@ -43,18 +43,18 @@ double RSO3::getElement (unsigned int row, unsigned int column) const
 
 RSO3 RSO3::operator= (const RSO3 & right)
 {
-  for (unsigned int i=0; i<3)
-    for (unsigned int j=0; j<3)
+  for (unsigned int i=0; i<3; i++)
+    for (unsigned int j=0; j<3; j++)
       a[i][j] = right.getElement (i+1, j+1);
   return *this;
 }
   
 RVector RSO3::getRow(unsigned int row) const
 {
-  RVector res ();
+  RVector res;
   if((row<1) or (row>3))
     return res;
-  RVector res1 (a[row][0], a[row][1], a[row][2]);
+  RVector res1 (a[row-1][0], a[row-1][1], a[row-1][2]);
   return res1;
 }
 
@@ -77,7 +77,7 @@ RSO3 operator* (const RSO3 & left, const RSO3 & right)
 }
 
 
-void RSO3::rotate (double phi, unsigned int axis)
+void RSO3::rotate (double phi, unsigned int axis)//vertel ya tvoy vektor!!
 {
   RSO3 tmp = *this;
   if((axis <1) or (axis>3))
@@ -103,9 +103,11 @@ void RSO3::rotate (double phi, unsigned int axis)
   *this = tmp*(*this);
 }
 
-void RSO3::EulerTransform ()
+void RSO3::EulerTransform (double phi, double theta, double psi)
 {
-  (*this)=rotate (psi, 3)*rotate (theta, 1)*rotate (phi,3);
+  rotate(phi,3);
+  rotate (theta, 1);
+  rotate (psi, 3);
 }
 
 RSO3::RSO3 ()
@@ -113,4 +115,4 @@ RSO3::RSO3 ()
   a[0][0] = 1; a [0][1] = 0; a[0][2] = 0;
   a[1][0] = 0; a [1][1] = 1; a[1][2] = 0;
   a[2][0] = 0; a [2][1] = 0; a[2][2] = 1;
-  
+}  
