@@ -124,6 +124,8 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
   pi1.setP (p1);
   pi2.setP (p2);
   pi3.setP (p3);
+  std::cout <<
+  (pi1.getP()+pi2.getP()+pi3.getP())*(pi1.getP()+pi2.getP()+pi3.getP())<< " ";
   //boost to tau rest frame system (alongside a1)
   pi1.boost (P3pi);
   pi2.boost (P3pi);

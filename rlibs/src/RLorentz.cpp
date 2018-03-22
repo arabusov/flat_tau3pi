@@ -29,17 +29,19 @@ void RLorentz::boost (const RLorentz & kuda, int sign)
   double beta = sign * kuda.beta ();
   double gamma = kuda.gamma ();
   RVector direction = kuda.getVector ();
-  RVector longiProj = vector().proj (direction);
-  RVector transProj = vector () - longiProj;
-  double length = longiProj.length();
-  double ftt = gamma*ft + beta*gamma*length;
-  longiProj = longiProj * (1./length);
-  length = gamma*length + beta*gamma*ft;
-  longiProj = longiProj * length;
-  RVector sum = longiProj + transProj;
-  sum.getXYZ (fx, fy, fz);
-  ft = ftt;
-  return;
+  if (direction.length () != 0)
+  {
+    RVector longiProj = vector().proj (direction);
+    RVector transProj = vector () - longiProj;
+    double length = longiProj.length();
+    double ftt = gamma*ft + beta*gamma*length;
+    longiProj = longiProj * (1./length);
+    length = gamma*length + beta*gamma*ft;
+    longiProj = longiProj * length;
+    RVector sum = longiProj + transProj;
+    sum.getXYZ (fx, fy, fz);
+    ft = ftt;
+  }
 }
 
 void RLorentz::LorentzTransform (const RLorentz & restFrame)

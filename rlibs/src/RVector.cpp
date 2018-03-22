@@ -48,8 +48,11 @@ double RVector::length () const
 RVector RVector::proj (const RVector & direction) const
 {
   RVector result (0,0,0);
-  RVector norm_direction = direction*(1./direction.length());
-  result = norm_direction * (norm_direction*(*this));
+  if (direction.length() > 0)
+  {
+    RVector norm_direction = direction*(1./direction.length());
+    result = norm_direction * (norm_direction*(*this));
+  }
   return result;  
 }
 
