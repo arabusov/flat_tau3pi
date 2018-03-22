@@ -68,7 +68,8 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
   RParticle pi1 ("pi", Ppi1,Xtau), pi2 ("pi", Ppi2, Xtau), pi3 ("pi", Ppi3,
     Xtau);
   pi3.chargeConjugate();
-  double m3pi = genFlat (rd, 3*pi1.mass(), tau_m.mass()-nu.mass());
+  double m3pi = 1.1;//genFlat (rd, 3*pi1.mass(), tau_m.mass()-nu.mass());
+  std::cout << m3pi << " ";
   //gen Neutrino
   double nu_phi = genFlat (rd,0, 2*pi);
   double nu_costh = genFlat (rd,-1.,1.);
@@ -79,13 +80,15 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
     p_nu * sin (nu_phi) * sin (nu_th),
     p_nu * cos (nu_th));
   nu.setP (Pneutrino);
+  //3 pi lorentz vector in tau rest frame
+  RLorentz P3pi = RLorentz (tau_m.mass(),0,0,0) - nu.getP();
   nu.boost (tau_m.getP()); //boost from tau to "lab" system
   plist.add (nu);
   //Neutrino generated. some kinematics to plot histogramms
   //nu.LorentzTransform (tau_m.getP());
   //blah blah
   //through e1 and e2, fix a1 meson mass, a1 meson rest frame
-  double a1_mass = 1.;
+  double a1_mass = m3pi;
   double E1=2*a1_mass;
   double E2=2*a1_mass;
   double m = pi1.mass();
@@ -97,6 +100,7 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
     ngen = ngen+1;
   }
   while (p1xmorep1 (E1,E2,a1_mass,m) or p1xmorep1 (E2,E1,a1_mass,m) or (E1+E2>a1_mass-m));
+  std::cout << E1 << " " << E2 << " ";
   double E3 = a1_mass - E1 - E2;
   RVector p3 (sqrt(sqr(E3)-sqr(pi1.mass())),0,0);
   double p3x=p3.length();
@@ -106,22 +110,29 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
   double p2y= sqrt (E2*E2-m*m-p2x*p2x);
   RVector p1 (p1x, p1y, 0);
   RVector p2 (p2x, p2y, 0);
-  std::cout << E1<< " ";
-  std::cout << E2<< " ";
-  std::cout << E3<< " ";
-//  std::cout << (E1*E1 - p1x*p1x-m*m)<< " ";
- // std::cout << (E2*E2 - p2x*p2x-m*m)<< " ";
-//  std::cout << (E3*E3 - m*m) << " ";
   //euler transform
   double alpha=genFlat (rd,0,2*pi);
   double gamma=genFlat(rd,0,2*pi);
   double cosbeta = genFlat (rd,-1,1);
   double beta = acos (cosbeta);
+  std::cout << alpha << " " << beta << " " << gamma << " ";
   RSO3 euler;
   euler.EulerTransform (alpha, beta, gamma);
+  p1 = euler*p1;
+  p2 = euler*p2;
   p3 = euler*p3;
+  pi1.setP (p1);
+  pi2.setP (p2);
+  pi3.setP (p3);
   //boost to tau rest frame system (alongside a1)
+  pi1.boost (P3pi);
+  pi2.boost (P3pi);
+  pi3.boost (P3pi);
+  std::cout <<pi1.getP()*pi2.getP() << " " <<pi2.getP()*pi3.getP()<<" ";
   //boost to "lab" rest frame (alongside tau)
+  pi1.boost (tau_m.getP());
+  pi2.boost (tau_m.getP());
+  pi3.boost (tau_m.getP());
   std::cout << std::endl;
   return plist;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cmath>
 class RVector
 {
   private:
@@ -21,6 +22,7 @@ class RVector
     RVector proj (const RVector & direction) const ;
     double length () const;
     std::string str () const;
+    double getCosTh () const {return fz/sqrt(fx*fx+fy*fy+fz*fz);}
 };
 
 

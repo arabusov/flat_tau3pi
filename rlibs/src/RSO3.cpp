@@ -96,7 +96,7 @@ void RSO3::rotate (double phi, unsigned int axis)//vertel ya tvoy vektor!!
   } else
   if (axis == 3)
   {
-    a[0][0] = cos(phi); a [0][1] = -sin(phi); a[0][2] = 0;
+    a[0][0] = cos(phi); a [0][1] = sin(phi); a[0][2] = 0;
     a[1][0] = -sin(phi); a [1][1] = cos(phi); a[1][2] = 0;
     a[2][0] = 0; a [2][1] = 0; a[2][2] = 1;
   }
