@@ -27,17 +27,33 @@ double genFlat (std::random_device & rd, double min=-1., double max=1.)
 }
 double sqr (double x) {return x*x;}
 
-double px (double e1, double e2, double p3, int i=1)
+double px (double e1, double e2, double p3, double m, int i=1)
 {
-  double sign = i%2==0 ? -1.: 1.;
-  return p3/2. + sign /2. * (e1*e1-e2*e2);
+  double sign =1.;
+  if (i%2==0)
+    sign=-1.;
+  if (p3!=0)
+    return -(p3/2. + sign /2. * (e1*e1-e2*e2)/p3);
+  else
+    if (sign <0)
+      return -sqrt (e2*e2-m*m);
+    else
+      return sqrt (e1*e1-m*m);
 }
 
-double py (double e1, double e2, double p3, double m, int i=1)
+bool p1xmorep1 (double e1, double e2, double m3pi, double m)
+{
+  if (sqr(m3pi-e1-e2)-m*m<0)
+    return true;
+  double p3 = sqrt(sqr(m3pi-e1-e2)-m*m);
+  return 2*p3*sqrt (e1*e1-m*m) < p3*p3+e1*e1-e2*e2;
+}
+
+/*double py (double e1, double e2, double p3, double m, int i=1)
 {
   double sign = i%2==0 ? -1.: 1.;
-  return sign*((e1*e1 + e2*e2 -p3*p3)/2. - sqr(e1*e1-e2*e2)/4./p3/p3);
-}
+  return sign*sqrt((e1*e1 + e2*e2 -p3*p3)/2. - sqr(e1*e1-e2*e2)/4./p3/p3 - m*m);
+}*/
 //RParticleList genDecay (const RVector & Ptau, const RVector & Xtau)
 RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
 {
@@ -70,28 +86,32 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
   //blah blah
   //through e1 and e2, fix a1 meson mass, a1 meson rest frame
   double a1_mass = 1.;
-  double E1=a1_mass;
-  double E2=a1_mass;
+  double E1=2*a1_mass;
+  double E2=2*a1_mass;
+  double m = pi1.mass();
   double ngen = 0;
-  while ((E1+E2 )>( a1_mass - pi1.mass()))
+  do
   {
     E1 = genFlat (rd, pi1.mass(),a1_mass-2*pi1.mass());
     E2 = genFlat (rd, pi1.mass(),a1_mass-2*pi1.mass());
     ngen = ngen+1;
   }
+  while (p1xmorep1 (E1,E2,a1_mass,m) or p1xmorep1 (E2,E1,a1_mass,m) or (E1+E2>a1_mass-m));
   double E3 = a1_mass - E1 - E2;
   RVector p3 (sqrt(sqr(E3)-sqr(pi1.mass())),0,0);
-  std::cout << p3.length() << " ";
   double p3x=p3.length();
-  double p1x = px (E1,E2,p3x,1);
-  double p2x = px (E1,E2,p3x,2);
-  double p1y = py (E1,E2, p3x, pi1.mass(),1);
-  double p2y = py (E1,E2, p3x, pi2.mass(),2);
-  RVector p1 (-p1x, p1y, 0);
-  RVector p2 (-p2x, p2y, 0);
-  std::cout << E1*E1 - p1*p1 << " ";
-  std::cout << E2*E2 - p2*p2 << " ";
-  std::cout << sqrt(E3*E3 - p3*p3) << " ";
+  double p1x = px (E1,E2,p3x,m, 1);
+  double p2x = px (E1,E2,p3x,m,2);
+  double p1y= -sqrt (E1*E1-m*m-p1x*p1x);
+  double p2y= sqrt (E2*E2-m*m-p2x*p2x);
+  RVector p1 (p1x, p1y, 0);
+  RVector p2 (p2x, p2y, 0);
+  std::cout << E1<< " ";
+  std::cout << E2<< " ";
+  std::cout << E3<< " ";
+//  std::cout << (E1*E1 - p1x*p1x-m*m)<< " ";
+ // std::cout << (E2*E2 - p2x*p2x-m*m)<< " ";
+//  std::cout << (E3*E3 - m*m) << " ";
   //euler transform
   double alpha=genFlat (rd,0,2*pi);
   double gamma=genFlat(rd,0,2*pi);
