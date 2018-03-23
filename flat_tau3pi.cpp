@@ -129,13 +129,12 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
   pi1.boost (P3pi);
   pi2.boost (P3pi);
   pi3.boost (P3pi);
-  std::cout <<p2p3-pi2.getP()*pi3.getP() <<" " << p2p3 << " ";
-  //(pi1.getP()+pi2.getP()+pi3.getP())*(pi1.getP()+pi2.getP()+pi3.getP())<< " ";
-  std::cout <<pi1.getP()*pi2.getP() << " " <<pi2.getP()*pi3.getP()<<" ";
   //boost to "lab" rest frame (alongside tau)
   pi1.boost (tau_m.getP());
   pi2.boost (tau_m.getP());
   pi3.boost (tau_m.getP());
+  std::cout <<p2p3-pi2.getP()*pi3.getP()<<" " << p2p3 << " ";
+  std::cout <<pi1.getP()*pi2.getP() << " " <<pi2.getP()*pi3.getP()<<" ";
   std::cout << std::endl;
   return plist;
 }
