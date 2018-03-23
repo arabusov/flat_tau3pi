@@ -1,5 +1,5 @@
 # Tau decay generator
-## Polarisation?
+## Polarization?
 No
 ## Hadron dynamics
 No
