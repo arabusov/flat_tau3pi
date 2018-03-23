@@ -12,4 +12,3 @@ make
 ```
 ## Dalitz plot
 ![Here should be dalitz plot](./example/dalitz.svg)
-<img src="./example/dalitz.svg">
