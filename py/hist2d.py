@@ -4,7 +4,7 @@ import sys
 
 data=[]
 fl=open (sys.argv[1])
-h=TH2D  ("hist", "Histogram",1000,0,4.,1000,0,4.)
+h=TH2D  ("hist", "Histogram",1000,-4,4.,1000,-4,4.)
 for line in fl:
   h.Fill (
   float(line.split()[int(sys.argv[2])]),

@@ -34,6 +34,8 @@ void RLorentz::boost (const RLorentz & kuda, int sign)
     RVector longiProj = vector().proj (direction);
     RVector transProj = vector () - longiProj;
     double length = longiProj.length();
+    if (direction*longiProj <0)
+      length = - length;
     double ftt = gamma*ft + beta*gamma*length;
     longiProj = longiProj * (1./length);
     length = gamma*length + beta*gamma*ft;

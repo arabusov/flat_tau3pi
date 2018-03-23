@@ -81,7 +81,7 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
     p_nu * cos (nu_th));
   nu.setP (Pneutrino);
   //3 pi lorentz vector in tau rest frame
-  RLorentz P3pi = RLorentz (tau_m.mass(),0,0,0) - nu.getP();
+  RLorentz P3pi = RLorentz (tau_m.mass(),0,0,0)-nu.getP();
   nu.boost (tau_m.getP()); //boost from tau to "lab" system
   plist.add (nu);
   //Neutrino generated. some kinematics to plot histogramms
@@ -124,12 +124,13 @@ RParticleList genDecay (std::random_device & rd, RVector & Ptau, RVector & Xtau)
   pi1.setP (p1);
   pi2.setP (p2);
   pi3.setP (p3);
-  std::cout <<
-  (pi1.getP()+pi2.getP()+pi3.getP())*(pi1.getP()+pi2.getP()+pi3.getP())<< " ";
   //boost to tau rest frame system (alongside a1)
+  double p2p3 = pi2.getP()*pi3.getP();
   pi1.boost (P3pi);
   pi2.boost (P3pi);
   pi3.boost (P3pi);
+  std::cout <<p2p3-pi2.getP()*pi3.getP() <<" " << p2p3 << " ";
+  //(pi1.getP()+pi2.getP()+pi3.getP())*(pi1.getP()+pi2.getP()+pi3.getP())<< " ";
   std::cout <<pi1.getP()*pi2.getP() << " " <<pi2.getP()*pi3.getP()<<" ";
   //boost to "lab" rest frame (alongside tau)
   pi1.boost (tau_m.getP());
