@@ -11,4 +11,5 @@ cmake ../
 make
 ```
 ## Dalitz plot
-![Here should be dalitz plot](./example/dalitz.svg)
+A1 meson mass is fixed to 1.1 GeV.
+![Here should be the dalitz plot](./example/dalitz.png)
