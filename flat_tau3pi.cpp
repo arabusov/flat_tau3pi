@@ -36,8 +36,7 @@ int main (int argc, char ** argv)
   for (unsigned int i = 0; i < 100000; i++)
   {
     RParticleList plist = genEvent (gen);   
-#if 0
-RParticle tau = plist.getList ()[0];
+    RParticle tau = plist.getList ()[0];
     RParticle nu = plist.getList ()[1];
     RParticle pi1 = plist.getList ()[2];
     RParticle pi2 = plist.getList ()[3];
@@ -50,6 +49,9 @@ RParticle tau = plist.getList ()[0];
     RLorentz p3= pi3.getP();
     RLorentz p3pi = p1+p2+p3;
     std::cout << (ptau-pnu-p3pi).E()<< " ";
+    std::cout << (ptau-pnu-p3pi).x()<< " ";
+    std::cout << (ptau-pnu-p3pi).y()<< " ";
+    std::cout << (ptau-pnu-p3pi).z()<< " ";
     std::cout << ptau*ptau << " " << pnu*pnu << " " << p1*p1 << " " << p2*p2 <<
     " " << p3*p3 << " ";
     std::cout << (p1+p2)*(p1+p2) << " " << (p1+p3)*(p1+p3) << " " <<
@@ -57,7 +59,6 @@ RParticle tau = plist.getList ()[0];
     std::cout << p3pi*p3pi << " ";
     std::cout << Cos (pnu, ptau) << " " << Cos (pnu, p3pi) << " " << Cos (p3pi,
     ptau) << " " << Cos (p1,p2) << " " << Cos (p1,p3) << " " << Cos (p2,p3);
-#endif
     std::cout << std::endl;
   }
   return 0;

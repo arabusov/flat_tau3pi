@@ -134,11 +134,7 @@ RLorentz RTau3pi::genNeutrino ()
   nu.setP (Pneutrino);
   //3 pi lorentz vector in tau rest frame
   RLorentz P3pi = RLorentz (mtau,0,0,0)-nu.getP();
-  RLorentz testP = P3pi;
-  std::cout << (P3pi+Ptau - nu.getP()).E() << " ";
-  P3pi.boost (Ptau);
   nu.boost (Ptau);
-  std::cout << (P3pi+Ptau - nu.getP()).E() << " ";
   plist.add (nu);
   return P3pi;
 }
