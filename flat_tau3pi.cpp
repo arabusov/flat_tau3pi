@@ -16,7 +16,7 @@ RParticleList genEvent (std::mt19937_64 & gen)
   double r = distr (gen); 
   double theta = acos(r);
   double phi = 2*3.1415926*distr (gen);
-  double P=1.;
+  double P=sqrt(5.3*5.3-1.77686*1.77686);
   RVector Ptau (P*sin(theta)*cos(phi),P*sin(theta)*sin(phi),P*cos(theta));
   RVector Xtau (0,0,0);
   RTau3pi tau_gen (1.1);//fix a1 mass to 1.1
@@ -47,7 +47,11 @@ int main (int argc, char ** argv)
     RLorentz p1= pi1.getP();
     RLorentz p2= pi2.getP();
     RLorentz p3= pi3.getP();
+    std::cout << p1.x() << " " << p1.y() << " " << p1.z() << " ";
+    std::cout << p2.x() << " " << p2.y() << " " << p2.z() << " ";
+    std::cout << p3.x() << " " << p3.y() << " " << p3.z() << " ";
     RLorentz p3pi = p1+p2+p3;
+    /*
     std::cout << (ptau-pnu-p3pi).E()<< " ";
     std::cout << (ptau-pnu-p3pi).x()<< " ";
     std::cout << (ptau-pnu-p3pi).y()<< " ";
@@ -58,7 +62,7 @@ int main (int argc, char ** argv)
     (p2+p3)*(p2+p3) << " ";
     std::cout << p3pi*p3pi << " ";
     std::cout << Cos (pnu, ptau) << " " << Cos (pnu, p3pi) << " " << Cos (p3pi,
-    ptau) << " " << Cos (p1,p2) << " " << Cos (p1,p3) << " " << Cos (p2,p3);
+    ptau) << " " << Cos (p1,p2) << " " << Cos (p1,p3) << " " << Cos (p2,p3);*/
     std::cout << std::endl;
   }
   return 0;
